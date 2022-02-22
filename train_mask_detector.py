@@ -15,6 +15,7 @@ from tensorflow.keras.utils import to_categorical
 from sklearn.preprocessing import LabelBinarizer
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report
+from sklearn.metrics import confusion_matrix
 from imutils import paths
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,7 +27,7 @@ INIT_LR = 1e-4
 EPOCHS = 20
 BS = 32
 
-DIRECTORY = r"C:\Mask Detection\CODE\Face-Mask-Detection-master\dataset"
+DIRECTORY = 'dataset' #D:\AI Data\Face-Mask-Detection\dataset' #"C:\Mask Detection\CODE\Face-Mask-Detection-master\dataset"
 CATEGORIES = ["with_mask", "without_mask"]
 
 # grab the list of images in our dataset directory, then initialize
@@ -117,6 +118,15 @@ predIdxs = np.argmax(predIdxs, axis=1)
 # show a nicely formatted classification report
 print(classification_report(testY.argmax(axis=1), predIdxs,
 	target_names=lb.classes_))
+
+cm = confusion_matrix(testY.argmax(axis=1), predIdxs)
+print(cm)
+
+#pip install scikit-plot
+import scikitplot as skplot 
+plt.rcParams['figure.figsize'] = 5,5
+skplot.metrics.plot_confusion_matrix(testY.argmax(axis=1), predIdxs)
+plt.show()
 
 # serialize the model to disk
 print("[INFO] saving mask detector model...")
